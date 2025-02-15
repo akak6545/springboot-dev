@@ -36,9 +36,8 @@ public class Article {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "author", nullable = false)
+    @Column(name = "author", nullable = true)  // nullable = true로 변경
     private String author;
-
 
     @Builder
     public Article(String author, String title, String content) {

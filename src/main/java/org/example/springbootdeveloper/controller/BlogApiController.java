@@ -21,11 +21,16 @@ public class BlogApiController {
     private final BlogService blogService;
     @PostMapping("/api/articles")
     public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request, Principal principal) {
-        Article savedArticle = blogService.save(request, principal.getName());
+        if (principal == null || principal.getName() == null) {
+            throw new IllegalArgumentException("User must be authenticated");
+        }
+
+        String author = principal.getName();
+        Article savedArticle = blogService.save(request, author);
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedArticle);
     }
-
     @GetMapping("/api/articles")
     public ResponseEntity<List<ArticleResponse>> findAllArticles() {
         List<ArticleResponse> articles = blogService.findAll()
